@@ -5,6 +5,9 @@ import java.awt.*;
 
 public class WhiteboardGUI extends JFrame {
      private JPanel whiteboardCanvas;
+     private JPanel connectionPanel;
+     private JPanel toolsPanel;
+     private JPanel chatPanel;
 
     public WhiteboardGUI() {
 
@@ -29,6 +32,18 @@ public class WhiteboardGUI extends JFrame {
         // CANVAS
         whiteboardCanvas = new CanvasPanel();
         mainPanel.add(whiteboardCanvas, BorderLayout.CENTER);
+
+        //CONNECTION PANEL
+        connectionPanel = new ConnectionPanel();
+        mainPanel.add(connectionPanel, BorderLayout.WEST);
+
+        //TOOLS PANEL
+        toolsPanel = new ToolsPanel();
+        mainPanel.add(toolsPanel, BorderLayout.EAST);
+
+        //CHAT PANEL
+        chatPanel = new ChatPanel();
+        mainPanel.add(chatPanel, BorderLayout.SOUTH);
     }
 
     private JPanel createTopBar() {
