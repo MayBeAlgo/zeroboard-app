@@ -1,13 +1,15 @@
 package gui;
 
+import utility.Line;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class WhiteboardGUI extends JFrame {
-     private JPanel whiteboardCanvas;
-     private JPanel connectionPanel;
-     private JPanel toolsPanel;
-     private JPanel chatPanel;
+     private CanvasPanel whiteboardCanvas;
+     private ConnectionPanel connectionPanel;
+     private ToolsPanel toolsPanel;
+     private ChatPanel chatPanel;
 
     public WhiteboardGUI() {
 
@@ -38,7 +40,7 @@ public class WhiteboardGUI extends JFrame {
         mainPanel.add(connectionPanel, BorderLayout.WEST);
 
         //TOOLS PANEL
-        toolsPanel = new ToolsPanel();
+        toolsPanel = new ToolsPanel(whiteboardCanvas);
         mainPanel.add(toolsPanel, BorderLayout.EAST);
 
         //CHAT PANEL

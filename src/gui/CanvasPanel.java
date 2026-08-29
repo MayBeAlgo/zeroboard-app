@@ -1,5 +1,7 @@
 package gui;
 
+import utility.Line;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -8,11 +10,13 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
 public class CanvasPanel extends JPanel{
+
     private Color brushColor = Color.BLACK;
     private int brushSize = 4;
 
     private int prevX,prevY;
     boolean drawing = false;
+
     java.util.List<Line> lines = new ArrayList<>();
 
     public CanvasPanel() {
@@ -46,14 +50,20 @@ public class CanvasPanel extends JPanel{
     addMouseMotionListener(new MouseMotionAdapter() {
         @Override
         public void mouseDragged(MouseEvent e) {
+            Line line = new Line();
             int currentX = e.getX();
             int currentY = e.getY();
             if(!drawing)
             {
                 return;
             }
-
-            lines.add(new Line(prevX,prevY,currentX,currentY));
+            line.setX1(prevX) ;
+            line.setY1(prevY);
+            line.setX2(currentX);
+            line.setY2(currentY);
+            line.setBrushColor(brushColor);
+            line.setBrushSize(brushSize);
+            lines.add(line);
 
             repaint();
 
@@ -70,29 +80,65 @@ public void paintComponent(Graphics g)
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
 
-    g2.setStroke(new BasicStroke(2));
-    g2.setColor(Color.blue);
 
     for(Line line : lines)
     {
-        g2.drawLine(line.x1,line.y1,line.x2,line.y2);
-        System.out.println("x1 :"+line.x1+" y1 :"+line.y1+" x2 :"+line.x2+" y2 :"+line.y2);
-    }
-}
-
-static class Line
-{
-    int x1,y1,x2,y2;
-    Line(int x1,int y1,int x2,int y2)
-    {
-        this.x1= x1;
-        this.x2=x2;
-        this.y1=y1;
-        this.y2=y2;
+        g2.setStroke(new BasicStroke(line.getBrushSize()));
+        g2.setColor(line.getBrushColor());
+        g2.drawLine(line.getX1(),line.getY1(),line.getX2(),line.getY2());
+        System.out.println("x1 :"+line.getX1()+" y1 :"+line.getY1()+" x2 :"+line.getX2()+" y2 :"+line.getY2());
     }
 }
 
 
+//    static class Line
+//{
+//    int x1,y1,x2,y2;
+//    Color brushColor;
+//    int brushSize;
+//
+//    Line(int x1,int y1,int x2,int y2)
+//    {
+//        this.x1= x1;
+//        this.x2=x2;
+//        this.y1=y1;
+//        this.y2=y2;
+//    }
+//
+//    public void setBrushColor(Color brushColor)
+//    {
+//        this.brushColor = brushColor;
+//    }
+//
+//    public void setBrushSize(int brushSize)
+//    {
+//        this.brushSize = brushSize;
+//    }
+//    public int getX1()
+//    {
+//        return x1;
+//    }
+//    public int getX2()
+//    {
+//        return x2;
+//    }
+//    public int getY1()
+//    {
+//        return y1;
+//    }
+//    public int getY2()
+//    {
+//        return y2;
+//    }
+//    public Color getBrushColor()
+//    {
+//        return brushColor;
+//    }
+//    public int getBrushSize()
+//    {
+//        return brushSize;
+//    }
+//}
 
 public void setBrushColor(Color color) {
 
