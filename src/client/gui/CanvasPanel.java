@@ -1,6 +1,6 @@
-package gui;
+package client.gui;
 
-import utility.Line;
+import client.model.Line;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class CanvasPanel extends JPanel{
 
+    private Line line;
     private Color brushColor = Color.BLACK;
     private int brushSize = 4;
 
@@ -32,7 +33,7 @@ public class CanvasPanel extends JPanel{
 
 
     //MAIN DRAWING LOGIC
-    setBackground(Color.YELLOW);
+
     addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -50,7 +51,7 @@ public class CanvasPanel extends JPanel{
     addMouseMotionListener(new MouseMotionAdapter() {
         @Override
         public void mouseDragged(MouseEvent e) {
-            Line line = new Line();
+             line = new Line();
             int currentX = e.getX();
             int currentY = e.getY();
             if(!drawing)
@@ -74,7 +75,10 @@ public class CanvasPanel extends JPanel{
     });
 }
 
-
+public void clearCanvas()
+{
+    lines.clear();
+}
 public void paintComponent(Graphics g)
 {
     super.paintComponent(g);
@@ -90,55 +94,16 @@ public void paintComponent(Graphics g)
     }
 }
 
+   //Undo and redo option
+    public void undoLastLine()
+    {
 
-//    static class Line
-//{
-//    int x1,y1,x2,y2;
-//    Color brushColor;
-//    int brushSize;
-//
-//    Line(int x1,int y1,int x2,int y2)
-//    {
-//        this.x1= x1;
-//        this.x2=x2;
-//        this.y1=y1;
-//        this.y2=y2;
-//    }
-//
-//    public void setBrushColor(Color brushColor)
-//    {
-//        this.brushColor = brushColor;
-//    }
-//
-//    public void setBrushSize(int brushSize)
-//    {
-//        this.brushSize = brushSize;
-//    }
-//    public int getX1()
-//    {
-//        return x1;
-//    }
-//    public int getX2()
-//    {
-//        return x2;
-//    }
-//    public int getY1()
-//    {
-//        return y1;
-//    }
-//    public int getY2()
-//    {
-//        return y2;
-//    }
-//    public Color getBrushColor()
-//    {
-//        return brushColor;
-//    }
-//    public int getBrushSize()
-//    {
-//        return brushSize;
-//    }
-//}
+    }
+
+    public void redoLastLine()
+    {
+
+    }
 
 public void setBrushColor(Color color) {
 

@@ -1,6 +1,4 @@
-package gui;
-
-import utility.Line;
+package client.gui;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,6 +7,7 @@ import java.awt.*;
 public class ToolsPanel extends JPanel {
     private CanvasPanel canvas;
     public ToolsPanel(CanvasPanel canvas) {
+
         this.canvas = canvas;
 
         setPreferredSize(new Dimension(100, 0));
@@ -30,9 +29,9 @@ public class ToolsPanel extends JPanel {
                         BoxLayout.Y_AXIS
                 )
         );
-        // ---------------------------------------------------------
+
+
         // TITLE
-        // ---------------------------------------------------------
 
         JLabel title = new JLabel("TOOLS");
 
@@ -47,9 +46,8 @@ public class ToolsPanel extends JPanel {
 
         add(Box.createVerticalStrut(20));
 
-        // ---------------------------------------------------------
+
         // COLOR
-        // ---------------------------------------------------------
 
         JButton colorButton =
                 createToolButton("Color");
@@ -72,9 +70,8 @@ public class ToolsPanel extends JPanel {
 
         add(Box.createVerticalStrut(10));
 
-        // ---------------------------------------------------------
+
         // BRUSH SIZE
-        // ---------------------------------------------------------
 
         JButton brushButton =
                 createToolButton("Brush");
@@ -108,20 +105,23 @@ public class ToolsPanel extends JPanel {
 
         add(Box.createVerticalStrut(10));
 
-        // ---------------------------------------------------------
+
         // ERASER
-        // ---------------------------------------------------------
 
         JButton eraserButton =
                 createToolButton("Eraser");
 
+        eraserButton.addActionListener(e -> {
+
+            canvas.setBrushColor(Color.WHITE);
+        });
         add(eraserButton);
 
         add(Box.createVerticalStrut(10));
 
-        // ---------------------------------------------------------
+
         // CLEAR
-        // ---------------------------------------------------------
+
 
         JButton clearButton =
                 createToolButton("Clear");
@@ -138,6 +138,7 @@ public class ToolsPanel extends JPanel {
 
             if (result == JOptionPane.YES_OPTION) {
 
+                canvas.clearCanvas();
                 canvas.repaint();
 
                 /*
@@ -150,7 +151,28 @@ public class ToolsPanel extends JPanel {
 
         add(clearButton);
 
+        add(Box.createVerticalStrut(10));
+
+        //UNDO OPTION
+        JButton undoButton = createToolButton("Undo");
+
+        undoButton.addActionListener(e -> {
+            canvas.undoLastLine();
+        });
+
+       add(undoButton);
+       add(Box.createVerticalStrut(10));
+
+       //REDO OPTION
+        JButton redoButton = createToolButton("Redo");
+
+        redoButton.addActionListener(e -> {
+            canvas.redoLastLine();
+        });
+
+        add(redoButton);
         add(Box.createVerticalGlue());
+
     }
 
     private JButton createToolButton(String text) {

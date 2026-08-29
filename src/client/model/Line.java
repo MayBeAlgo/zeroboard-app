@@ -1,4 +1,4 @@
-package utility;
+package client.model;
 
 import java.awt.*;
 
