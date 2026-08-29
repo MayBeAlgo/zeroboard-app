@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WhiteboardGUI extends JFrame {
-
+     private JPanel whiteboardCanvas;
 
     public WhiteboardGUI() {
 
@@ -25,8 +25,13 @@ public class WhiteboardGUI extends JFrame {
         //TOP BAR OF THE BOARD
         JPanel topBar = createTopBar();
         mainPanel.add(topBar, BorderLayout.NORTH);
+
+        // CANVAS
+        whiteboardCanvas = new CanvasPanel();
+        mainPanel.add(whiteboardCanvas, BorderLayout.CENTER);
     }
-        private JPanel createTopBar() {
+
+    private JPanel createTopBar() {
 
             JPanel panel = new JPanel(new BorderLayout());
 
