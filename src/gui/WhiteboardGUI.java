@@ -1,5 +1,8 @@
 package gui;
 
+import client.ClientNetwork;
+import commons.Role;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,8 +12,15 @@ public class WhiteboardGUI extends JFrame {
      private ToolsPanel toolsPanel;
      private ChatPanel chatPanel;
 
-     
-    public WhiteboardGUI() {
+    private final Role role;
+    private final ClientNetwork client;
+
+    public WhiteboardGUI(Role role,ClientNetwork client) {
+
+        //idetify the role of the user
+        this.role = role;
+        this.client = client;
+
 
         setTitle("ZeroBoard");
         setSize(1200, 750);
@@ -35,7 +45,7 @@ public class WhiteboardGUI extends JFrame {
         mainPanel.add(whiteboardCanvas, BorderLayout.CENTER);
 
         //CONNECTION PANEL
-        connectionPanel = new ConnectionPanel();
+        connectionPanel = new ConnectionPanel(client,role);
         mainPanel.add(connectionPanel, BorderLayout.WEST);
 
         //TOOLS PANEL

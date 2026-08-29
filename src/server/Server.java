@@ -2,21 +2,26 @@ package server;
 
 import gui.ChatPanel;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 
 public class Server {
-    ChatPanel chatPanel;
-    public Server(ChatPanel chatPanel)  {
+    private int port;
+    public Server(int port)  {
+        this.port = port;
+
+    }
+    public void start()
+    {
         try {
-  
-            this.chatPanel = chatPanel;
-           
-            ServerSocket server = new ServerSocket(6000);
-
+            ServerSocket server = new ServerSocket(port);
             System.out.println("Server started....");
-            chatPanel.setSystemServerStatusMssg("Server is waiting for clients.....");
 
+            BufferedReader in = new BufferedReader(new InputStreamReader(server.accept().getInputStream()));
+            String message = in.readLine();
+            System.out.println("Message from client: " + message);
 
         } catch (IOException e) {
         }

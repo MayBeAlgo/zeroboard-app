@@ -1,5 +1,6 @@
 package client;
 
+import commons.Role;
 import gui.WhiteboardGUI;
 
 import javax.swing.*;
@@ -10,7 +11,9 @@ public class ClientApp {
 
         SwingUtilities.invokeLater(() -> {
 
-            WhiteboardGUI whiteboard = new WhiteboardGUI();
+           ClientNetwork client = new ClientNetwork();
+
+            WhiteboardGUI whiteboard = new WhiteboardGUI(Role.GUEST,client);
 
             whiteboard.setVisible(true);
         });

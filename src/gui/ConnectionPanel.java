@@ -1,5 +1,9 @@
 package gui;
 
+import client.ClientNetwork;
+import commons.NetworkConfig;
+import commons.Role;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -10,16 +14,23 @@ public class ConnectionPanel extends JPanel{
     private final JTextField portField;
     private final JTextField usernameField;
 
-    private final JButton connectButton;
-
+    private JButton connectButton;
+    private JButton changeNameButton;
     private final JLabel connectionStatus;
 
     private final DefaultListModel<String> usersModel;
     private final JList<String> usersList;
-    private final String ip = "";
-    private final String portNum ="" ;
+    private  String ip;
+    private  String portNum ;
+    private  String username;
 
-    public ConnectionPanel() {
+    private ClientNetwork client;
+    private Role role;
+
+    public ConnectionPanel(ClientNetwork client,Role role) {
+
+        this.client = client;
+        this.role = role;
 
         setPreferredSize(new Dimension(220, 0));
 
@@ -82,13 +93,35 @@ public class ConnectionPanel extends JPanel{
         add(Box.createVerticalStrut(15));
 
 
-        // CONNECT BUTTON
+        // CONNECT BUTTON & CHANGE NAME BUTTON
 
-        connectButton = new JButton("Connect");
+        if(role == Role.HOST)
+        {
+            changeNameButton = new JButton("Change Name");
 
-        connectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            changeNameButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        add(connectButton);
+            add(changeNameButton);
+
+            //HOST INFORMATION
+            ipField.setText("localhost");
+            portField.setText(String.valueOf(NetworkConfig.PORT));
+
+            changeNameButton.addActionListener(e -> {
+                changeHostName();
+            });
+
+        } else {
+            connectButton = new JButton("Connect");
+
+            connectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            connectButton.addActionListener(e -> {
+                connectUser();
+            });
+            add(connectButton);
+
+        }
 
         add(Box.createVerticalStrut(15));
 
@@ -130,7 +163,6 @@ public class ConnectionPanel extends JPanel{
                 new JScrollPane(usersList);
 
         scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         add(scrollPane);
 
 
@@ -155,4 +187,21 @@ public class ConnectionPanel extends JPanel{
 
         return label;
     }
+
+    //CONNECTION LOGIC
+    private void connectUser()
+    {
+
+        ip = ipField.getText();
+        portNum = portField.getText();
+        username = usernameField.getText();
+
+        client.connect(ip,portNum,username);
+        usersModel.addElement(client.getUsername());
     }
+    //HOST NAME CHANGE
+    private void changeHostName()
+    {
+        usersModel.set(0,usernameField.getText()+"[HOST]");
+    }
+}
