@@ -1,4 +1,4 @@
-package client.gui;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +9,7 @@ public class WhiteboardGUI extends JFrame {
      private ToolsPanel toolsPanel;
      private ChatPanel chatPanel;
 
+     
     public WhiteboardGUI() {
 
         setTitle("ZeroBoard");

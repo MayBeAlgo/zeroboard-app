@@ -1,4 +1,4 @@
-package client.gui;
+package gui;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,6 +8,8 @@ public class ChatPanel extends JPanel {
 
     private final JTextArea chatArea;
     private final JTextField messageField;
+    private String welcomeMssg = "[System] Welcome to ZeroBoard\n";
+    private String systemServerStatusMssg = "[System] Not connected to a server\n";
 
     public ChatPanel() {
 
@@ -41,10 +43,8 @@ public class ChatPanel extends JPanel {
 
         chatArea.setForeground(Color.WHITE);
 
-        chatArea.setText(
-                "[System] Welcome to ZeroBoard\n" +
-                        "[System] Not connected to a server\n"
-        );
+        chatArea.setText(welcomeMssg +getSystemServerStatusMssg());
+        System.out.println(getSystemServerStatusMssg());
 
         JScrollPane scrollPane =
                 new JScrollPane(chatArea);
@@ -103,7 +103,7 @@ public class ChatPanel extends JPanel {
         if (message.isEmpty()) {
             return;
         }
-        
+
         chatArea.append(
                 "[You] " + message + "\n"
         );
@@ -113,5 +113,20 @@ public class ChatPanel extends JPanel {
         chatArea.setCaretPosition(
                 chatArea.getDocument().getLength()
         );
+    }
+   public void changeChatAreaStatus()
+   {
+       chatArea.setText(welcomeMssg+"\n"+getSystemServerStatusMssg());
+   }
+    //getters and setters
+    public void setSystemServerStatusMssg(String mssg) {
+        systemServerStatusMssg = mssg;
+        changeChatAreaStatus();
+        System.out.println(systemServerStatusMssg);
+    }
+
+    public String getSystemServerStatusMssg()
+    {
+        return systemServerStatusMssg;
     }
 }

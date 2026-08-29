@@ -1,4 +1,4 @@
-package client.gui;
+package gui;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,8 +16,8 @@ public class ConnectionPanel extends JPanel{
 
     private final DefaultListModel<String> usersModel;
     private final JList<String> usersList;
-    private final String ip = "127.0.0.1";
-    private final String portNum = "5000";
+    private final String ip = "";
+    private final String portNum ="" ;
 
     public ConnectionPanel() {
 

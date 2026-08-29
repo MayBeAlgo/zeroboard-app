@@ -1,6 +1,6 @@
-package client.gui;
+package gui;
 
-import client.model.Line;
+import model.Line;
 
 import javax.swing.*;
 import java.awt.*;
