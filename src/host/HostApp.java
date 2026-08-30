@@ -17,7 +17,10 @@ public class HostApp {
             WhiteboardGUI gui = new WhiteboardGUI(Role.HOST,client);
             gui.setVisible(true);
         });
+
+        //SERVER START
         Server server = new Server(NetworkConfig.PORT);
-        server.start();
+       // server.start();
+        Thread.startVirtualThread(server::start);
     }
 }

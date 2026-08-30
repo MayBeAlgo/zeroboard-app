@@ -99,21 +99,9 @@ public class ConnectionPanel extends JPanel{
 
         if(role == Role.HOST)
         {
-            changeNameButton = new JButton("Change Name");
-
-            changeNameButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-            add(changeNameButton);
-
-            //HOST INFORMATION
             ipField.setText("localhost");
             portField.setText(String.valueOf(NetworkConfig.PORT));
-
-            changeNameButton.addActionListener(e -> {
-                changeHostName();
-            });
-
-        } else {
+        }
             connectButton = new JButton("Connect");
 
             connectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -123,7 +111,6 @@ public class ConnectionPanel extends JPanel{
             });
             add(connectButton);
 
-        }
 
         add(Box.createVerticalStrut(15));
 
@@ -132,9 +119,7 @@ public class ConnectionPanel extends JPanel{
 
         connectionStatus = new JLabel("● Disconnected");
 
-        connectionStatus.setForeground(
-                new Color(220, 80, 80)
-        );
+        connectionStatus.setForeground(new Color(220, 80, 80));
 
         add(connectionStatus);
 
@@ -146,9 +131,7 @@ public class ConnectionPanel extends JPanel{
         JLabel usersTitle = new JLabel("CONNECTED USERS");
 
         usersTitle.setForeground(Color.WHITE);
-        usersTitle.setFont(
-                new Font("SansSerif", Font.BOLD, 12)
-        );
+        usersTitle.setFont(new Font("SansSerif", Font.BOLD, 12));
 
         add(usersTitle);
 
@@ -161,16 +144,11 @@ public class ConnectionPanel extends JPanel{
         usersList.setBackground(new Color(45, 45, 45));
         usersList.setForeground(Color.WHITE);
 
-        JScrollPane scrollPane =
-                new JScrollPane(usersList);
+        JScrollPane scrollPane = new JScrollPane(usersList);
 
         scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(scrollPane);
 
-
-        // TEMPORARY DEMO USER
-
-        usersModel.addElement("You");
     }
 
     private JLabel createLabel(String text) {
@@ -201,12 +179,21 @@ public class ConnectionPanel extends JPanel{
 
             //Client is connected now
             client.connect(ip, portNum, username);
-            usersModel.addElement(client.getUsername());
+            if(role == Role.HOST)
+            {
+                usersModel.addElement(client.getUsername()+"[HOST]");
+            }
+            else {
+                usersModel.addElement(client.getUsername());
+            }
+
+            connectButton.setEnabled(false);
         }
     }
     //HOST NAME CHANGE
     private void changeHostName()
     {
-        usersModel.set(0,usernameField.getText()+"[HOST]");
+        username = usernameField.getText();
+        usersModel.set(0,username+"[HOST]");
     }
 }

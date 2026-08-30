@@ -3,6 +3,7 @@ package gui;
 import client.ClientNetwork;
 import commons.ChatMessage;
 import commons.ClientStatus;
+import commons.NetworkListener;
 import commons.Role;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class ChatPanel extends JPanel {
     private final JTextArea chatArea;
     private final JTextField messageField;
     private String welcomeMssg = "[System] Welcome to ZeroBoard\n";
-    private String defaultStatusMssg = "[System] Server is online now";
+    private String defaultStatusMssg = "[System] Server is online now\n";
     private String systemStatusMessage ;
 
     private Role role;
@@ -70,47 +71,45 @@ public class ChatPanel extends JPanel {
 
         // MESSAGE INPUT
 
-        JPanel inputPanel =
-                new JPanel(new BorderLayout(5, 0));
+        JPanel inputPanel = new JPanel(new BorderLayout(5, 0));
 
         inputPanel.setOpaque(false);
 
         messageField = new JTextField();
 
-        messageField.setToolTipText(
-                "Type a message..."
-        );
+        messageField.setToolTipText("Type a message...");
 
-        JButton sendButton =
-                new JButton("Send");
+        JButton sendButton = new JButton("Send");
 
-        inputPanel.add(
-                messageField,
-                BorderLayout.CENTER
-        );
+        inputPanel.add(messageField, BorderLayout.CENTER);
 
-        inputPanel.add(
-                sendButton,
-                BorderLayout.EAST
-        );
+        inputPanel.add(sendButton, BorderLayout.EAST);
 
-        add(
-                inputPanel,
-                BorderLayout.SOUTH
-        );
+        add(inputPanel, BorderLayout.SOUTH);
 
 
         // SEND MESSAGE
 
-        sendButton.addActionListener(
-                e -> sendMessage()
-        );
+        sendButton.addActionListener(e -> sendMessage());
 
-        messageField.addActionListener(
-                e -> sendMessage()
-        );
+         messageField.addActionListener(e -> sendMessage());
+
     }
 
+    //update incoming chatmessage
+    public void handleChatMessage(String chatMessage)
+    {
+        String[] chat = chatMessage.split("\\|");
+        if (chat.length >= 3) {
+            String username = chat[1];
+            String message = chat[2];
+            chatArea.append("[" + username + "] " + message + "\n");
+        }
+
+        chatArea.setCaretPosition(chatArea.getDocument().getLength());
+    }
+
+    // update incoming system message
     public void addSystemMessage(String systemStatusMessage)
     {
         this.systemStatusMessage = systemStatusMessage;
@@ -118,36 +117,18 @@ public class ChatPanel extends JPanel {
     }
     private void sendMessage() {
 
-        String message =
-                messageField.getText().trim();
+        String message = messageField.getText().trim();
 
         if (message.isEmpty()) {
             return;
         }
 
-        chatArea.append(
-                "[You] " + message + "\n"
-        );
-
+        //send entered message to network
+        client.send("CHAT|" + client.getUsername() + "|" + message);
         messageField.setText("");
 
-        chatArea.setCaretPosition(
-                chatArea.getDocument().getLength()
-        );
+
+        chatArea.setCaretPosition(chatArea.getDocument().getLength());
     }
-//   public void changeChatAreaStatus()
-//   {
-//       chatArea.setText(welcomeMssg+"\n"+getSystemServerStatusMssg());
-//   }
-//    //getters and setters
-//    public void setSystemServerStatusMssg(String mssg) {
-//      //  systemServerStatusMssg = mssg;
-//        changeChatAreaStatus();
-//        //System.out.println(systemServerStatusMssg);
-//    }
-//
-//    public String getSystemServerStatusMssg()
-//    {
-//        return systemServerStat;
-//    }
+
 }

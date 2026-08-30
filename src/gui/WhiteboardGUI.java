@@ -2,6 +2,7 @@ package gui;
 
 import client.ClientNetwork;
 import commons.ChatMessage;
+import commons.NetworkListener;
 import commons.Role;
 
 import javax.swing.*;
@@ -70,8 +71,20 @@ public class WhiteboardGUI extends JFrame {
                 chatPanel.addSystemMessage(ChatMessage.getSystemDisconnectedMessage());
             }
         });
-    }
 
+        //send incoming message to chatpanel
+        client.setNetworkListener(new NetworkListener() {
+            @Override
+            public void onMessageRecieved(String message) {
+                System.out.println("Message listener invoked");
+                if (message.startsWith("CHAT|")) {
+                    chatPanel.handleChatMessage(message);
+                }
+            }
+        });
+
+
+}
 
     private JPanel createTopBar() {
 
