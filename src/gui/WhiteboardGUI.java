@@ -1,6 +1,7 @@
 package gui;
 
 import client.ClientNetwork;
+import commons.ChatMessage;
 import commons.Role;
 
 import javax.swing.*;
@@ -53,9 +54,24 @@ public class WhiteboardGUI extends JFrame {
         mainPanel.add(toolsPanel, BorderLayout.EAST);
 
         //CHAT PANEL
-        chatPanel = new ChatPanel();
+        chatPanel = new ChatPanel(role,client);
         mainPanel.add(chatPanel, BorderLayout.SOUTH);
+
+
+        //send connection mssg
+        client.setConnectionListener(new ClientNetwork.ConnectionListener() {
+            @Override
+            public void onConnected() {
+                chatPanel.addSystemMessage(ChatMessage.getSystemConnectedMessage());
+            }
+
+            @Override
+            public void onDisconnected() {
+                chatPanel.addSystemMessage(ChatMessage.getSystemDisconnectedMessage());
+            }
+        });
     }
+
 
     private JPanel createTopBar() {
 

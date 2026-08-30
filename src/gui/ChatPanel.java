@@ -1,5 +1,10 @@
 package gui;
 
+import client.ClientNetwork;
+import commons.ChatMessage;
+import commons.ClientStatus;
+import commons.Role;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,9 +14,16 @@ public class ChatPanel extends JPanel {
     private final JTextArea chatArea;
     private final JTextField messageField;
     private String welcomeMssg = "[System] Welcome to ZeroBoard\n";
-    private String systemServerStatusMssg = "[System] Not connected to a server\n";
+    private String defaultStatusMssg = "[System] Server is online now";
+    private String systemStatusMessage ;
 
-    public ChatPanel() {
+    private Role role;
+    private ClientNetwork client;
+
+    public ChatPanel(Role role, ClientNetwork client) {
+
+        this.role = role;
+        this.client = client;
 
         setPreferredSize(new Dimension(0, 130));
 
@@ -43,8 +55,12 @@ public class ChatPanel extends JPanel {
 
         chatArea.setForeground(Color.WHITE);
 
-        chatArea.setText(welcomeMssg +getSystemServerStatusMssg());
-        System.out.println(getSystemServerStatusMssg());
+        chatArea.setText(welcomeMssg);
+        if(role == Role.HOST)
+        {
+            chatArea.setText(defaultStatusMssg);
+            //System.out.println(getSystemServerStatusMssg());
+        }
 
         JScrollPane scrollPane =
                 new JScrollPane(chatArea);
@@ -95,6 +111,11 @@ public class ChatPanel extends JPanel {
         );
     }
 
+    public void addSystemMessage(String systemStatusMessage)
+    {
+        this.systemStatusMessage = systemStatusMessage;
+        chatArea.append(systemStatusMessage +"\n");
+    }
     private void sendMessage() {
 
         String message =
@@ -114,19 +135,19 @@ public class ChatPanel extends JPanel {
                 chatArea.getDocument().getLength()
         );
     }
-   public void changeChatAreaStatus()
-   {
-       chatArea.setText(welcomeMssg+"\n"+getSystemServerStatusMssg());
-   }
-    //getters and setters
-    public void setSystemServerStatusMssg(String mssg) {
-        systemServerStatusMssg = mssg;
-        changeChatAreaStatus();
-        System.out.println(systemServerStatusMssg);
-    }
-
-    public String getSystemServerStatusMssg()
-    {
-        return systemServerStatusMssg;
-    }
+//   public void changeChatAreaStatus()
+//   {
+//       chatArea.setText(welcomeMssg+"\n"+getSystemServerStatusMssg());
+//   }
+//    //getters and setters
+//    public void setSystemServerStatusMssg(String mssg) {
+//      //  systemServerStatusMssg = mssg;
+//        changeChatAreaStatus();
+//        //System.out.println(systemServerStatusMssg);
+//    }
+//
+//    public String getSystemServerStatusMssg()
+//    {
+//        return systemServerStat;
+//    }
 }

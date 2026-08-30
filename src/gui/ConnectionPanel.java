@@ -1,6 +1,8 @@
 package gui;
 
 import client.ClientNetwork;
+import commons.ChatMessage;
+import commons.ClientStatus;
 import commons.NetworkConfig;
 import commons.Role;
 
@@ -192,12 +194,15 @@ public class ConnectionPanel extends JPanel{
     private void connectUser()
     {
 
-        ip = ipField.getText();
-        portNum = portField.getText();
-        username = usernameField.getText();
+        if(client.getClientStatus()!= ClientStatus.CONNECTED) {
+            ip = ipField.getText();
+            portNum = portField.getText();
+            username = usernameField.getText();
 
-        client.connect(ip,portNum,username);
-        usersModel.addElement(client.getUsername());
+            //Client is connected now
+            client.connect(ip, portNum, username);
+            usersModel.addElement(client.getUsername());
+        }
     }
     //HOST NAME CHANGE
     private void changeHostName()
