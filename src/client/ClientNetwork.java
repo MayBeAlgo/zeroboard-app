@@ -1,6 +1,7 @@
 package client;
 
 import commons.ClientStatus;
+import commons.EventMessage;
 import commons.NetworkListener;
 
 import java.io.*;
@@ -27,8 +28,8 @@ public class ClientNetwork {
 
     public interface ConnectionListener {
 
-        void onConnected();
-        void onDisconnected();
+        void onConnected(String mssg);
+        void onDisconnected(String mssg);
     }
 
     public void setConnectionListener(ConnectionListener listener) {
@@ -61,16 +62,17 @@ public class ClientNetwork {
 
             System.out.println("Connected to " + ip + ":" + port);
 
+            startReceiver();
+
             if (connectionListener != null) {
-                connectionListener.onConnected();
+                connectionListener.onConnected("");
             }
 
-            startReceiver();
 
         } catch (IOException e) {
 
             if (connectionListener != null) {
-                connectionListener.onDisconnected();
+                connectionListener.onDisconnected("");
             }
 
             System.out.println("Connection failed: " + e.getMessage());
@@ -81,7 +83,7 @@ public class ClientNetwork {
     // ---------------- SEND ----------------
 
     //SEND THE MESSAGE TO SERVER
-    public void send(String message) {
+    public  void send(String message) {
 
         if (out != null) {
             out.println(message);
@@ -104,16 +106,31 @@ public class ClientNetwork {
 
                     System.out.println("From server: " + message);
 
-                    networkListener.onMessageRecieved(message);
+                    if(message.startsWith(EventMessage.userJoinedEvent))
+                    {
+                        connectionListener.onConnected(message);
+                    }
+                    else if(message.startsWith(EventMessage.chatEvent))
+                    {
+                        networkListener.onMessageRecieved(message);
+                    }
+                    else if(message.startsWith(EventMessage.drawEvent))
+                    {
+                        networkListener.onMessageRecieved(message);
+                    }
+                    else if(message.startsWith(EventMessage.userLeftEvent))
+                    {
+                        connectionListener.onDisconnected(message);
+                    }
 
                 }
 
             } catch (IOException e) {
 
-                System.out.println("Disconnected from server.");
+                System.out.println("Disconnected from server. exception");
 
                 if (connectionListener != null) {
-                    connectionListener.onDisconnected();
+                    connectionListener.onDisconnected(EventMessage.userLeftEvent+"|"+username);
                 }
             }
         });
@@ -125,12 +142,16 @@ public class ClientNetwork {
     public void disconnect() {
 
         try {
+            if (out != null) {
+                out.println(EventMessage.userLeftEvent + "|" + username);
+            }
 
-            if (socket != null) {
+            if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
 
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            System.out.println("Error occurred while disconnecting.");
         }
     }
 

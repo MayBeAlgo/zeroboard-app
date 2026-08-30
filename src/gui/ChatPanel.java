@@ -1,9 +1,7 @@
 package gui;
 
 import client.ClientNetwork;
-import commons.ChatMessage;
-import commons.ClientStatus;
-import commons.NetworkListener;
+import commons.EventMessage;
 import commons.Role;
 
 import javax.swing.*;
@@ -16,7 +14,7 @@ public class ChatPanel extends JPanel {
     private final JTextField messageField;
     private String welcomeMssg = "[System] Welcome to ZeroBoard\n";
     private String defaultStatusMssg = "[System] Server is online now\n";
-    private String systemStatusMessage ;
+    private String userStatusMessage ;
 
     private Role role;
     private ClientNetwork client;
@@ -110,11 +108,20 @@ public class ChatPanel extends JPanel {
     }
 
     // update incoming system message
-    public void addSystemMessage(String systemStatusMessage)
-    {
-        this.systemStatusMessage = systemStatusMessage;
-        chatArea.append(systemStatusMessage +"\n");
+    public void addSystemMessage(String userStatusMessage) {
+        this.userStatusMessage = userStatusMessage;
+        String[] part = userStatusMessage.split("\\|");
+        if (part.length >= 2) {
+            String user = part[1];
+            if (userStatusMessage.startsWith(EventMessage.userJoinedEvent)) {
+                chatArea.append("[" + user + "] has joined the session.\n");
+            } else if (userStatusMessage.startsWith(EventMessage.userLeftEvent)) {
+                chatArea.append("[" + user + "] has left the session.\n");
+            }
+        }
     }
+
+    //send message to server
     private void sendMessage() {
 
         String message = messageField.getText().trim();
@@ -124,7 +131,7 @@ public class ChatPanel extends JPanel {
         }
 
         //send entered message to network
-        client.send("CHAT|" + client.getUsername() + "|" + message);
+        client.send(EventMessage.chatEvent + "|" + client.getUsername() + "|" + message);
         messageField.setText("");
 
 

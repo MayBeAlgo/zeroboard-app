@@ -1,8 +1,12 @@
 package server;
 
+import commons.EventMessage;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,6 +15,7 @@ public class Server {
     private final int port;
 
     private final Set<ClientHandler> clientList = ConcurrentHashMap.newKeySet();
+    private final List<String> drawingHistory = new ArrayList<>();
 
     public Server(int port) {
         this.port = port;
@@ -36,6 +41,9 @@ public class Server {
 
                 //START NEW THREAD FOR EACH CLIENT
                 Thread.startVirtualThread(handler);
+
+                //SEND CURRENT BOARD STATE
+                sendDrawingHistory(handler);
             }
 
         } catch (IOException e) {
@@ -47,11 +55,30 @@ public class Server {
     //BROADCAST RECIEVED MESSAGE TO ALL THE CLIENTS
     public void broadcast(String message, ClientHandler sender) {
 
+        //SAVE ALL DRAWING HISTORY
+        if (message.startsWith(EventMessage.drawEvent)) {
+
+            drawingHistory.add(message);
+        }
+
         for (ClientHandler client : clientList) {
 
             //SYNCHRONIZED
             client.send(message);
         }
+    }
+
+    //SEND DRAWING HISTORY TO NEW JOINING CLIENTS
+    private synchronized void sendDrawingHistory(ClientHandler client) {
+
+        System.out.println("Sending drawing history to new client...");
+
+        for (String drawing : drawingHistory) {
+            client.send(drawing);
+            //System.out.println(drawing);
+        }
+
+        System.out.println("Drawing history sent: " + drawingHistory.size() + " lines");
     }
 
     public void removeClient(ClientHandler client) {

@@ -2,11 +2,14 @@ package gui;
 
 import client.ClientNetwork;
 import commons.ChatMessage;
+import commons.EventMessage;
 import commons.NetworkListener;
 import commons.Role;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class WhiteboardGUI extends JFrame {
      private CanvasPanel whiteboardCanvas;
@@ -43,7 +46,7 @@ public class WhiteboardGUI extends JFrame {
         mainPanel.add(topBar, BorderLayout.NORTH);
 
         // CANVAS
-        whiteboardCanvas = new CanvasPanel();
+        whiteboardCanvas = new CanvasPanel(client);
         mainPanel.add(whiteboardCanvas, BorderLayout.CENTER);
 
         //CONNECTION PANEL
@@ -62,13 +65,15 @@ public class WhiteboardGUI extends JFrame {
         //send connection mssg
         client.setConnectionListener(new ClientNetwork.ConnectionListener() {
             @Override
-            public void onConnected() {
-                chatPanel.addSystemMessage(ChatMessage.getSystemConnectedMessage());
+            public void onConnected(String mssg) {
+                    connectionPanel.updateUserList(mssg);
+                    chatPanel.addSystemMessage(mssg);
             }
 
             @Override
-            public void onDisconnected() {
-                chatPanel.addSystemMessage(ChatMessage.getSystemDisconnectedMessage());
+            public void onDisconnected(String mssg) {
+                chatPanel.addSystemMessage(mssg);
+                connectionPanel.updateUserList(mssg);
             }
         });
 
@@ -77,9 +82,23 @@ public class WhiteboardGUI extends JFrame {
             @Override
             public void onMessageRecieved(String message) {
                 System.out.println("Message listener invoked");
-                if (message.startsWith("CHAT|")) {
+                if (message.startsWith(EventMessage.chatEvent)) {
                     chatPanel.handleChatMessage(message);
+                }else if(message.startsWith(EventMessage.drawEvent))
+                {
+                    whiteboardCanvas.drawRemoteLine(message);
                 }
+            }
+        });
+
+        //close socket when user is disconnected
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                client.disconnect();
+                dispose();
             }
         });
 

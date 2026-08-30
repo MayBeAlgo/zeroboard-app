@@ -22,6 +22,7 @@ public class ClientHandler implements Runnable {
 
         try {
 
+            //reads socket messages
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
@@ -42,7 +43,6 @@ public class ClientHandler implements Runnable {
 
             //IF ANYTHING GOES WRONG DISCONNET THE CLIENT AND CLOSE THE SOCKET
             server.removeClient(this);
-
             try {
                 socket.close();
             }
@@ -58,4 +58,5 @@ public class ClientHandler implements Runnable {
             out.println(message);
         }
     }
+
 }

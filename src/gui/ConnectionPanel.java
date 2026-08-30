@@ -1,10 +1,7 @@
 package gui;
 
 import client.ClientNetwork;
-import commons.ChatMessage;
-import commons.ClientStatus;
-import commons.NetworkConfig;
-import commons.Role;
+import commons.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -38,14 +35,7 @@ public class ConnectionPanel extends JPanel{
 
         setBackground(new Color(35, 35, 35));
 
-        setBorder(
-                new EmptyBorder(
-                        15,
-                        15,
-                        15,
-                        15
-                )
-        );
+        setBorder(new EmptyBorder(15, 15, 15, 15));
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -115,8 +105,8 @@ public class ConnectionPanel extends JPanel{
         add(Box.createVerticalStrut(15));
 
 
-        // STATUS
-
+        //STATUS
+        //DEFAULT STATUS OF ALL THE USERS
         connectionStatus = new JLabel("● Disconnected");
 
         connectionStatus.setForeground(new Color(220, 80, 80));
@@ -126,7 +116,7 @@ public class ConnectionPanel extends JPanel{
         add(Box.createVerticalStrut(25));
 
 
-        // USERS
+        // USERS TAB
 
         JLabel usersTitle = new JLabel("CONNECTED USERS");
 
@@ -155,13 +145,9 @@ public class ConnectionPanel extends JPanel{
 
         JLabel label = new JLabel(text);
 
-        label.setForeground(
-                new Color(180, 180, 180)
-        );
+        label.setForeground(new Color(180, 180, 180));
 
-        label.setFont(
-                new Font("SansSerif", Font.PLAIN, 12)
-        );
+        label.setFont(new Font("SansSerif", Font.PLAIN, 12));
 
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -179,21 +165,61 @@ public class ConnectionPanel extends JPanel{
 
             //Client is connected now
             client.connect(ip, portNum, username);
-            if(role == Role.HOST)
-            {
-                usersModel.addElement(client.getUsername()+"[HOST]");
-            }
-            else {
-                usersModel.addElement(client.getUsername());
-            }
+
+            //SEND CONNECTION UPDATE TO NETWORK
+            client.send(EventMessage.userJoinedEvent+"|"+username);
 
             connectButton.setEnabled(false);
         }
     }
-    //HOST NAME CHANGE
-    private void changeHostName()
+
+
+    //UPDATE USER LIST WHEN A USER IS CONNECTED OR DISCONNECTED
+    public void updateUserList(String user)
     {
-        username = usernameField.getText();
-        usersModel.set(0,username+"[HOST]");
+        String[] parts = user.split("\\|", 2);
+
+        if (parts.length < 2) {
+            return;
+        }
+
+        String event = parts[0];
+        String username = parts[1];
+
+        if (event.equals(EventMessage.userJoinedEvent)) {
+
+            //CHANGE CONNECTION STATUS
+            connectionStatus.setText("● Connected");
+            connectionStatus.setForeground(Color.GREEN);
+
+
+            String displayName = username;
+
+            if (username.equals(client.getUsername()) && role == Role.HOST) {
+
+                displayName += " [HOST]";
+            }
+
+            if (!usersModel.contains(displayName)) {
+                usersModel.addElement(displayName);
+            }
+
+        } else if (event.equals(EventMessage.userLeftEvent)) {
+
+            String displayName = username;
+
+            if (role == Role.HOST && username.equals(client.getUsername())) {
+                displayName += " [HOST]";
+            }
+
+            usersModel.removeElement(displayName);
+
+            if(!usersModel.contains(displayName))
+            {
+                connectionStatus.setText("● Disconnected");
+                connectionStatus.setForeground(Color.RED);
+            }
+        }
     }
+
 }

@@ -1,8 +1,8 @@
 package commons;
 
 public class ChatMessage {
-    private static String systemConnectedMessage = "[System] Connected to server ";
-    private static String systemDisconnectedMessage = "[System] Disconnected from server";
+    private static String systemConnectedMessage = "Connected to server ";
+    private static String systemDisconnectedMessage = " Disconnected from server";
     private String sentMessage;
 
     public static String getSystemConnectedMessage()
