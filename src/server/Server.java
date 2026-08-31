@@ -39,11 +39,12 @@ public class Server {
 
                 clientList.add(handler);
 
+                //SEND CURRENT BOARD STATE
+                sendDrawingHistory(handler,socket);
+
                 //START NEW THREAD FOR EACH CLIENT
                 Thread.startVirtualThread(handler);
 
-                //SEND CURRENT BOARD STATE
-                sendDrawingHistory(handler);
             }
 
         } catch (IOException e) {
@@ -53,7 +54,7 @@ public class Server {
     }
 
     //BROADCAST RECIEVED MESSAGE TO ALL THE CLIENTS
-    public void broadcast(String message, ClientHandler sender) {
+    public synchronized void broadcast(String message, ClientHandler sender) {
 
         //SAVE ALL DRAWING HISTORY
         if (message.startsWith(EventMessage.drawEvent)) {
@@ -69,12 +70,15 @@ public class Server {
     }
 
     //SEND DRAWING HISTORY TO NEW JOINING CLIENTS
-    private synchronized void sendDrawingHistory(ClientHandler client) {
+    private synchronized void sendDrawingHistory(ClientHandler client,Socket sender) {
 
         System.out.println("Sending drawing history to new client...");
 
         for (String drawing : drawingHistory) {
-            client.send(drawing);
+           // if (client != sender) {
+                client.send(drawing);
+          //  }
+
             //System.out.println(drawing);
         }
 

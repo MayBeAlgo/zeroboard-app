@@ -83,7 +83,7 @@ public class ClientNetwork {
     // ---------------- SEND ----------------
 
     //SEND THE MESSAGE TO SERVER
-    public  void send(String message) {
+    public synchronized  void send(String message) {
 
         if (out != null) {
             out.println(message);

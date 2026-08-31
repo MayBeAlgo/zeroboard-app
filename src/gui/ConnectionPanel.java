@@ -214,11 +214,18 @@ public class ConnectionPanel extends JPanel{
 
             usersModel.removeElement(displayName);
 
-            if(!usersModel.contains(displayName))
-            {
-                connectionStatus.setText("● Disconnected");
-                connectionStatus.setForeground(Color.RED);
-            }
+
+        }
+
+    }
+    //connection status
+    public void setConnected(boolean connected) {
+        if (connected) {
+            connectionStatus.setText("● Connected");
+            connectionStatus.setForeground(new Color(80, 200, 120));
+        } else {
+            connectionStatus.setText("● Disconnected");
+            connectionStatus.setForeground(new Color(220, 80, 80));
         }
     }
 

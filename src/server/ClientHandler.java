@@ -15,16 +15,19 @@ public class ClientHandler implements Runnable {
 
         this.socket = socket;
         this.server = server;
+        try {
+            //reads socket messages
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+
+        }
     }
 
     @Override
     public void run() {
 
         try {
-
-            //reads socket messages
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
 
             String message;
 

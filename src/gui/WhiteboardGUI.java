@@ -66,12 +66,14 @@ public class WhiteboardGUI extends JFrame {
         client.setConnectionListener(new ClientNetwork.ConnectionListener() {
             @Override
             public void onConnected(String mssg) {
+                     connectionPanel.setConnected(true);
                     connectionPanel.updateUserList(mssg);
                     chatPanel.addSystemMessage(mssg);
             }
 
             @Override
             public void onDisconnected(String mssg) {
+                connectionPanel.setConnected(false);
                 chatPanel.addSystemMessage(mssg);
                 connectionPanel.updateUserList(mssg);
             }
