@@ -1,6 +1,7 @@
 package gui;
 
 import client.ClientNetwork;
+import commons.ClientStatus;
 import commons.EventMessage;
 import commons.Role;
 
@@ -127,6 +128,12 @@ public class ChatPanel extends JPanel {
         String message = messageField.getText().trim();
 
         if (message.isEmpty()) {
+            return;
+        }
+
+        if (client.getClientStatus() != ClientStatus.CONNECTED) {
+            chatArea.append("[System] Connect to a server before chatting.\n");
+            messageField.setText("");
             return;
         }
 
