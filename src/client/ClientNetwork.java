@@ -84,6 +84,7 @@ public class ClientNetwork {
         }
     }
 
+    //UPDATE IF CLIENT IS CONNECTED
     public void updateConnectButtonStatus(JButton connectButtonStatus){
         this.connectButtonStatus = connectButtonStatus;
     }

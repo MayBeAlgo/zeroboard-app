@@ -30,7 +30,6 @@ echo.
 echo Creating JAR...
 
 jar cfe ZeroBoardClient.jar client.ClientApp -C out .
-:: For Host-> jar cfe ZeroBoardHost.jar host.HostApp -C out .
 
 if errorlevel 1 (
     echo.
@@ -43,4 +42,3 @@ echo ==============================
 echo       BUILD SUCCESSFUL
 echo ==============================
 echo Artifact: ZeroBoardClient.jar
-:: echo Artifact: ZeroBoardHost.jar

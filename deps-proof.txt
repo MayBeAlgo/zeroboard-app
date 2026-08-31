@@ -1,0 +1,38 @@
+ZeroBoard — Dependency Proof
+
+Project: ZeroBoard
+Language: Java 21
+
+External Dependencies:
+None.
+
+ZeroBoard is implemented using only the Java Standard Library.
+No Maven, Gradle, external JARs, third-party frameworks, or external
+runtime libraries are required.
+
+Core Java APIs used include:
+
+- java.net.Socket
+- java.net.ServerSocket
+- java.io.BufferedReader
+- java.io.InputStreamReader
+- java.io.PrintWriter
+- java.util.ArrayList
+- java.util.List
+- java.util.Set
+- java.util.concurrent.ConcurrentHashMap
+- Java Virtual Threads (Thread.startVirtualThread)
+- Java Swing (javax.swing)
+- AWT (java.awt)
+- Java event APIs (java.awt.event)
+
+Build Tools:
+- JDK 21 javac
+- JDK 21 jar
+
+Runtime Dependencies:
+None.
+
+The application can be compiled using the provided build scripts
+and executed using the generated JAR files without installing any
+third-party library or framework.

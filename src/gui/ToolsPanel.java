@@ -14,21 +14,9 @@ public class ToolsPanel extends JPanel {
 
         setBackground(new Color(35, 35, 35));
 
-        setBorder(
-                new EmptyBorder(
-                        15,
-                        10,
-                        15,
-                        10
-                )
-        );
+        setBorder(new EmptyBorder(15, 10, 15, 10));
 
-        setLayout(
-                new BoxLayout(
-                        this,
-                        BoxLayout.Y_AXIS
-                )
-        );
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 
         // TITLE
@@ -36,9 +24,7 @@ public class ToolsPanel extends JPanel {
         JLabel title = new JLabel("TOOLS");
 
         title.setForeground(Color.WHITE);
-        title.setFont(
-                new Font("SansSerif", Font.BOLD, 12)
-        );
+        title.setFont(new Font("SansSerif", Font.BOLD, 12));
 
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -49,17 +35,11 @@ public class ToolsPanel extends JPanel {
 
         // COLOR
 
-        JButton colorButton =
-                createToolButton("Color");
+        JButton colorButton = createToolButton("Color");
 
         colorButton.addActionListener(e -> {
 
-            Color selected =
-                    JColorChooser.showDialog(
-                            this,
-                            "Choose Color",
-                            canvas.getBrushColor()
-                    );
+            Color selected = JColorChooser.showDialog(this, "Choose Color", canvas.getBrushColor());
 
             if (selected != null) {
                 canvas.setBrushColor(selected);
@@ -73,17 +53,11 @@ public class ToolsPanel extends JPanel {
 
         // BRUSH SIZE
 
-        JButton brushButton =
-                createToolButton("Brush");
+        JButton brushButton = createToolButton("Brush");
 
         brushButton.addActionListener(e -> {
 
-            String value =
-                    JOptionPane.showInputDialog(
-                            this,
-                            "Brush size:",
-                            canvas.getBrushSize()
-                    );
+            String value = JOptionPane.showInputDialog(this, "Brush size:", canvas.getBrushSize());
 
             if (value != null) {
 
@@ -108,8 +82,7 @@ public class ToolsPanel extends JPanel {
 
         // ERASER
 
-        JButton eraserButton =
-                createToolButton("Eraser");
+        JButton eraserButton = createToolButton("Eraser");
 
         eraserButton.addActionListener(e -> {
 
@@ -123,55 +96,45 @@ public class ToolsPanel extends JPanel {
         // CLEAR
 
 
-        JButton clearButton =
-                createToolButton("Clear");
+        JButton clearButton = createToolButton("Clear");
 
         clearButton.addActionListener(e -> {
 
-            int result =
-                    JOptionPane.showConfirmDialog(
-                            this,
-                            "Clear whiteboard?",
-                            "Confirm",
-                            JOptionPane.YES_NO_OPTION
-                    );
+            int result = JOptionPane.showConfirmDialog(this, "Clear whiteboard?", "Confirm", JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
 
                 canvas.clearCanvas();
                 canvas.repaint();
-
-                /*
-                 * Later:
-                 *
-                 * networkClient.sendClear();
-                 */
             }
         });
 
         add(clearButton);
 
-        add(Box.createVerticalStrut(10));
-
-        //UNDO OPTION
-        JButton undoButton = createToolButton("Undo");
-
-        undoButton.addActionListener(e -> {
-            canvas.undoLastLine();
-        });
-
-       add(undoButton);
-       add(Box.createVerticalStrut(10));
-
-       //REDO OPTION
-        JButton redoButton = createToolButton("Redo");
-
-        redoButton.addActionListener(e -> {
-            canvas.redoLastLine();
-        });
-
-        add(redoButton);
         add(Box.createVerticalGlue());
+
+        //***NO SUITABLE IMPLEMTATION YET*******
+
+
+//        //UNDO OPTION
+//        JButton undoButton = createToolButton("Undo");
+//
+//        undoButton.addActionListener(e -> {
+//            canvas.undoLastLine();
+//        });
+//
+//       add(undoButton);
+//       add(Box.createVerticalStrut(10));
+//
+//       //REDO OPTION
+//        JButton redoButton = createToolButton("Redo");
+//
+//        redoButton.addActionListener(e -> {
+//            canvas.redoLastLine();
+//        });
+//
+//        add(redoButton);
+//        add(Box.createVerticalGlue());
 
     }
 
