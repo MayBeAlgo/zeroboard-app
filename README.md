@@ -135,14 +135,14 @@ zeroboardapplication/
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started 
 
 ### Prerequisites
 
 - **JDK 21+** (the project uses `Thread.startVirtualThread(...)`, a Java 21 feature)
 - An IDE such as **IntelliJ IDEA** (project ships with a `.iml` module file), or just the command line
 
-### 🔧 BUILD GUIDE
+### 🔧 BUILD GUIDE (WINDOWS COMPATIBLE)
 ### 🖥️ For Host
 
 1. locate the `buildHost.bat` file in the root directory of the project.
