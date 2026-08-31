@@ -6,6 +6,7 @@ import commons.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.IOException;
 
 public class ConnectionPanel extends JPanel{
 
@@ -158,19 +159,28 @@ public class ConnectionPanel extends JPanel{
     private void connectUser()
     {
 
-        if(client.getClientStatus()!= ClientStatus.CONNECTED) {
+        if(connectButton.getText().equals("Disconnect"))
+        {
+            client.disconnect();
+            connectButton.setText("Connect");
+            connectionStatus.setText("● Disconnected");
+            connectionStatus.setForeground(new Color(220, 80, 80));
+            usersModel.clear();
+        }
+        else if(connectButton.getText().equals("Connect")){
+            
             ip = ipField.getText();
             portNum = portField.getText();
             username = usernameField.getText();
 
+            client.updateConnectButtonStatus(connectButton);
             //Client is connected now
             client.connect(ip, portNum, username);
 
             //SEND CONNECTION UPDATE TO NETWORK
             client.send(EventMessage.userJoinedEvent+"|"+username);
-
-            connectButton.setEnabled(false);
         }
+
     }
 
 

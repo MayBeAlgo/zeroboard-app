@@ -4,6 +4,7 @@ import commons.ClientStatus;
 import commons.EventMessage;
 import commons.NetworkListener;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
@@ -22,6 +23,7 @@ public class ClientNetwork {
 
     private ConnectionListener connectionListener;
     private NetworkListener networkListener;
+    private JButton connectButtonStatus;
 
     // ---------------- CONNECTION LISTENER ----------------
 
@@ -56,6 +58,7 @@ public class ClientNetwork {
             }
 
             socket = new Socket(ip, Integer.parseInt(port));
+            connectButtonStatus.setText("Disconnect");
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
@@ -73,10 +76,15 @@ public class ClientNetwork {
 
             if (connectionListener != null) {
                 connectionListener.onDisconnected("");
+                JOptionPane.showMessageDialog(null, "Connection failed: RETRY  " + e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
             }
 
             System.out.println("Connection failed: " + e.getMessage());
         }
+    }
+
+    public void updateConnectButtonStatus(JButton connectButtonStatus){
+        this.connectButtonStatus = connectButtonStatus;
     }
 
 
