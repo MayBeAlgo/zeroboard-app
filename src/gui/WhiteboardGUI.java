@@ -86,9 +86,14 @@ public class WhiteboardGUI extends JFrame {
                 System.out.println("Message listener invoked");
                 if (message.startsWith(EventMessage.chatEvent)) {
                     chatPanel.handleChatMessage(message);
-                }else if(message.startsWith(EventMessage.drawEvent))
+                }
+                else if(message.startsWith(EventMessage.drawEvent))
                 {
                     whiteboardCanvas.drawRemoteLine(message);
+                }
+                if (message.startsWith(EventMessage.userLeftEvent)) {
+                    chatPanel.addSystemMessage(message);
+                    connectionPanel.updateUserList(message);
                 }
             }
         });

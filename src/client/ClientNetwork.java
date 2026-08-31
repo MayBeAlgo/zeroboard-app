@@ -130,7 +130,7 @@ public class ClientNetwork {
                     }
                     else if(message.startsWith(EventMessage.userLeftEvent))
                     {
-                        connectionListener.onDisconnected(message);
+                        networkListener.onMessageRecieved(message);   // 🟢 instead
                     }
 
                 }
@@ -152,16 +152,14 @@ public class ClientNetwork {
     public void disconnect() {
 
         try {
-            if (out != null) {
-                out.println(EventMessage.userLeftEvent + "|" + username);
-            }
-
             if (socket != null && !socket.isClosed()) {
+
+                // Tell server WHICH user is leaving
+                out.println(EventMessage.userLeftEvent + "|" + username);
+
                 socket.close();
             }
-
-        } catch (IOException e) {
-            System.out.println("Error occurred while disconnecting.");
+        } catch (IOException ignored) {
         }
     }
 

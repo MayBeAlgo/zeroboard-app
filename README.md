@@ -164,7 +164,7 @@ zeroboardapplication/
 2. This starts the `Server` on port **6000** (see [`NetworkConfig`](src/commons/NetworkConfig.java)) on a background thread, and opens the whiteboard window, auto-connecting as a client to its own server.
 3. Share your local IP address with others on the same network.
 
-###
+### Run as Client
 
 1. Run `java -jar ZeroBoardClient.jar` to start the client application.
 2. In the **Connection** panel, enter:
