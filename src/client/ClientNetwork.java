@@ -59,6 +59,7 @@ public class ClientNetwork {
 
             socket = new Socket(ip, Integer.parseInt(port));
             connectButtonStatus.setText("Disconnect");
+            clientStatus = ClientStatus.CONNECTED;
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
